@@ -1,0 +1,16 @@
+apply plugin:'com.android.library'
+android {
+    compileSdkVersion 24
+    buildToolsVersion "27.0.3"
+    sourceSets {
+        main {
+            manifest.srcFile 'AndroidManifest.xml'
+            java.srcDirs = ['src']
+            resources.srcDirs = ['src']
+            aidl.srcDirs = ['aidl']
+            renderscript.srcDirs = ['src']
+            res.srcDirs = ['res']
+            assets.srcDirs = ['assets']
+        }
+    }
+}

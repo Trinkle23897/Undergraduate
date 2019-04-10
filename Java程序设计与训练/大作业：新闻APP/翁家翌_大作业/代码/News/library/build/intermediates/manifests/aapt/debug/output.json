@@ -1,0 +1,1 @@
+[{"outputType":{"type":"AAPT_FRIENDLY_MERGED_MANIFESTS"},"apkInfo":{"type":"MAIN","splits":[],"versionCode":2110,"versionName":"2.1.1","enabled":true,"outputFile":"library-debug.aar","fullName":"debug","baseName":"debug"},"path":"AndroidManifest.xml","properties":{"packageId":"com.handmark.pulltorefresh.library","split":""}}]

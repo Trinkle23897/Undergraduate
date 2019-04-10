@@ -1,0 +1,29 @@
+-- Merging decision tree log ---
+manifest
+ADDED from /home/trinkle/hw/java/News/library/AndroidManifest.xml:2:1-11:12
+INJECTED from /home/trinkle/hw/java/News/library/AndroidManifest.xml:2:1-11:12
+INJECTED from /home/trinkle/hw/java/News/library/AndroidManifest.xml:2:1-11:12
+INJECTED from /home/trinkle/hw/java/News/library/AndroidManifest.xml:2:1-11:12
+INJECTED from /home/trinkle/hw/java/News/library/AndroidManifest.xml:2:1-11:12
+INJECTED from /home/trinkle/hw/java/News/library/AndroidManifest.xml:2:1-11:12
+INJECTED from /home/trinkle/hw/java/News/library/AndroidManifest.xml:2:1-11:12
+	package
+		ADDED from /home/trinkle/hw/java/News/library/AndroidManifest.xml:3:5-49
+		INJECTED from /home/trinkle/hw/java/News/library/AndroidManifest.xml
+		INJECTED from /home/trinkle/hw/java/News/library/AndroidManifest.xml
+	android:versionName
+		ADDED from /home/trinkle/hw/java/News/library/AndroidManifest.xml:5:5-32
+		INJECTED from /home/trinkle/hw/java/News/library/AndroidManifest.xml
+		INJECTED from /home/trinkle/hw/java/News/library/AndroidManifest.xml
+	xmlns:android
+		ADDED from /home/trinkle/hw/java/News/library/AndroidManifest.xml:2:11-69
+	android:versionCode
+		ADDED from /home/trinkle/hw/java/News/library/AndroidManifest.xml:4:5-31
+		INJECTED from /home/trinkle/hw/java/News/library/AndroidManifest.xml
+		INJECTED from /home/trinkle/hw/java/News/library/AndroidManifest.xml
+uses-sdk
+ADDED from /home/trinkle/hw/java/News/library/AndroidManifest.xml:7:5-43
+	android:minSdkVersion
+		ADDED from /home/trinkle/hw/java/News/library/AndroidManifest.xml:7:15-40
+application
+ADDED from /home/trinkle/hw/java/News/library/AndroidManifest.xml:9:5-20
