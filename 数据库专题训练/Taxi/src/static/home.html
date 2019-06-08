@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html style="height: 100%; width: 100%">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+        <title>Taxi Demo</title>
+    </head>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+    <script src="https://unpkg.com/gcoord/dist/gcoord.js"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+    <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.14&key=cbed7938908110202977e7fb7d4a120e&plugin=AMap.Autocomplete,AMap.PlaceSearch"></script>
+    <script type="text/javascript" src="https://cache.amap.com/lbs/static/addToolbar.js"></script>
+    <body style="height: 100%; width: 100%; overflow: auto; margin: 0px; padding: 0px">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="container">
+                <a class="navbar-brand" href="#">TAXI</a>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item active">
+                            <a class="nav-link" href="#">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/about">About</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <div class="py-5"  style="height:90%; width: 100%">
+            <div class="row" style="height:100%; width: 100%">
+                <div class="col-md-1"></div>
+                <div class="col-md-7" style="height: 100%; width: 100%">
+                    <div id="container_map" style="height: 100%; width: 100%"></div>
+                </div>
+                <div class="col-md-3">
+                    <h2 class="mb-3">Locations</h2>
+                    <form class="mb-2" id="form_location">
+                        <div class="form-row">
+                            <div class="col-sm-12">
+                                <input type="text" class="form-control mb-2" placeholder="Search for location" id="location_name">
+                            </div>
+                        </div>
+                    </form>
+
+                    <form class="mb-2" id="form_origin">
+                        <div class="form-row">
+                            <div class="col-sm-5">
+                                <input type="text" readonly class="form-control-plaintext" value="Origin place ID">
+                            </div>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control-plaintext" id="origin_place" placeholder="Unselected">
+                            </div>
+                            <div class="col-sm-3">
+                                <button type="submit" class="btn btn-success mb-2" onclick="select_origin()">Select</button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <form class="mb-5" id="form_dest">
+                        <div class="form-row">
+                            <div class="col-sm-5">
+                                <input type="text" readonly class="form-control-plaintext" value="Destination place ID">
+                            </div>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control-plaintext" id="dest_place" placeholder="Unselected">
+                            </div>
+                            <div class="col-sm-3">
+                                <button type="submit" class="btn btn-success mb-2" onclick="select_dest()">Select</button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <h2 class="mb-3">Operations</h2>
+                    <button class="btn btn-primary mb-3" id="taxi_search" onclick="search_taxi()"><i class="fas fa-sync-alt"></i> Search for Taxi</button>
+                    <form class="mb-5" id="form_taxi">
+                        <div class="form-row">
+                            <div class="col-sm-5">
+                                <input type="text" readonly class="form-control-plaintext" value="Current Taxi ID">
+                            </div>
+                            <div class="col-sm-4">
+                                <input type="text" class="form-control-plaintext" id="taxi_id" placeholder="Unselected">
+                            </div>
+                            <div class="col-sm-3">
+                                <button type="submit" class="btn btn-success mb-2" id="taxi_select" disabled onclick="select_taxi()">Select</button>
+                            </div>
+                        </div>
+                    </form>
+                    <h2 class="mb-3">Taxi Infomation</h2>
+                    <div id="taxi_info">
+                        None
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+
+    <script type="text/javascript">
+        // Global markers
+        var origin, dest, current;
+
+        // Query results
+        var results;
+
+        // Cars
+        var cars;
+        var current_taxi;
+        var current_route;
+        var current_markers;
+
+        // Refresh overlays
+        function refresh() {
+            map.clearMap();
+            if (origin) map.add(origin);
+            if (dest) map.add(dest);
+            if (cars)
+                for (var i = 0; i < cars.length; ++i)
+                    map.add(cars[i]);
+            if (current_taxi) {
+                map.add(current_taxi);
+                if (current_route) current_route.setMap(map);
+                if (current_markers)
+                    for (var i = 0; i < current_markers.length; ++i)
+                        map.add(current_markers[i]);
+            }
+        }
+
+        // Check point duplication
+        function equal(point1, point2) {
+            return point1.lng == point2.lng && point1.lat == point2.lat;
+        }
+
+        // New marker for point on the map
+        function new_marker(point, color) {
+            return new AMap.Marker({
+                icon: "/static/marker/" + color + '.png',
+                position: point
+            });
+        }
+
+        // New marker for car
+        function new_car(point) {
+            return new AMap.Marker({
+                icon: "/static/marker/car.png",
+                position: point
+            });
+        }
+
+        // Clear car markers
+        function clear() {
+            cars = null;
+            current_taxi = null;
+            current_toute = null;
+            current_markers = null;
+            $("#taxi_select").attr("disabled", true);
+            $("#taxi_info").html("None");
+        }
+
+        // Select origin point
+        function select_origin() {
+            if (current != null) {
+                if (dest != null && equal(dest.getPosition(), current.getPosition()))
+                    alert("Origin is identical to destination.");
+                else {
+                    clear();
+                    origin = new_marker(current.getPosition(), "blue");
+                    origin.xlid = current.xlid;
+                    $("#origin_place").val(origin.xlid.toString());
+                    refresh();
+                }
+            }
+            else alert("Current position not set.");
+        }
+
+        // Select destination point
+        function select_dest() {
+            if (current != null) {
+                if (origin != null && equal(origin.getPosition(), current.getPosition()))
+                    alert("Destination is identical to origin.");
+                else {
+                    clear();
+                    dest = new_marker(current.getPosition(), "red");
+                    dest.xlid = current.xlid;
+                    $("#dest_place").val(dest.xlid.toString());
+                    refresh();
+                }
+            }
+            else alert("Current position not set.");
+        }
+
+        // Search for taxis
+        function search_taxi() {
+            if ($("#origin_place").val() == null || $("#dest_place").val() == null) {
+                alert("Please set origin and destination first.");
+                return;
+            }
+            var origin_id = parseInt($("#origin_place").val());
+            var dest_id = parseInt($("#dest_place").val());
+            var query = {origin: origin_id, dest: dest_id};
+
+            // Need to clear markers here
+            clear();
+
+            $.post("/query", JSON.stringify(query), function(data) {
+                results = data["result"];
+                if (results.length == 6) {
+                    $("#taxi_info").html("<p>No taxi found</p>");
+                }
+                else {
+                    var html = "<table class=\"table table-striped\">\n" +
+                        "<thead>\n" +
+                        "<tr>\n" +
+                        "<th scope=\"col\">Car ID</th>\n" +
+                        "<th scope=\"col\"><i class=\"fas fa-user\"></i></th>\n" +
+                        "<th scope=\"col\">Distance</th>\n" +
+                        "<th scope=\"col\">Detour0</th>\n" +
+                        "<th scope=\"col\">Detour1</th>\n" +
+                        "</tr>\n" +
+                        "</thead>\n" +
+                        "<tbody>\n";
+
+                    for (var i = 0; i < results.length - 6; i++) {
+                        var res = results[i + 6];
+                        var line = "<tr>\n" +
+                            "<th scope=\"row\">" + res[0].toString() + "</th>\n" +
+                            "<th scope=\"row\">" + (res[1] - 3).toString() + "</th>\n" +
+                            "<th scope=\"row\">" + res[2].toString() + "</th>\n" +
+                            "<th scope=\"row\">" + res[3].toString() + "</th>\n" +
+                            "<th scope=\"row\">" + res[4].toString() + "</th>\n" +
+                            "</tr>\n";
+                        html = html + line;
+                    }
+
+                    html = html + "</tbody>\n</table>";
+                    $("#taxi_info").html(html);
+                    cars = new Array();
+                    for (var i = 0; i < results.length - 6; i++) {
+                        var res = results[i + 6];
+
+                        var routes = res[5];
+                        var car_pos = routes[0][0];
+                        cars.push(new_car(new AMap.LngLat(car_pos[1], car_pos[2])));
+                        cars[i].xlid = i + 6;
+                        cars[i].on("click", clickOnCar);
+                        map.add(cars[i]);
+                    }
+                    origin = new_marker(new AMap.LngLat(results[1], results[2]), "blue");
+                    origin.xlid = results[0];
+                    dest = new_marker(new AMap.LngLat(results[4], results[5]), "red");
+                    dest.xlid = results[3];
+                    refresh();
+                    map.setCenter(origin.getPosition());
+                    map.setZoom(15);
+                }
+            }, "json");
+        }
+
+        // Select a taxi and show the route
+        function select_taxi() {
+            current_route = null;
+            current_markers = null;
+            refresh();
+
+            var path = new Array();
+            var idx = current_taxi.xlid;
+            var routes = results[idx][5];
+            for (var i = 0; i < routes.length; i++)
+                for (var j = 0; j < routes[i].length; j++) {
+                    var pos = routes[i][j];
+                    path.push(new AMap.LngLat(pos[1], pos[2]));
+                }
+
+            var polyline = new AMap.Polyline({
+                path: path,
+                strokeColor: "blue",
+                strokeWeight: 8,
+                strokeOpacity: 0.8
+            });
+            polyline.setMap(map);
+            map.setFitView([polyline])
+            current_route = polyline;
+
+            for (var i = 2; i < routes.length; i++) {
+                var mid_point = routes[i][0];
+                var mid_marker = new_marker(new AMap.LngLat(mid_point[1], mid_point[2]), "green");
+                map.add(mid_marker);
+                current_markers.push(mid_marker);
+            }
+        }
+
+        // Marker click event handler
+        function clickOnMarker(e) {
+            map.remove(e.target);
+        }
+
+        // Car click event handler
+        function clickOnCar(e) {
+            var i = e.target.xlid;
+            $("#taxi_id").val(results[i][0].toString());
+            $("#taxi_select").removeAttr("disabled");
+            current_taxi = cars[i - 6];
+        }
+
+        // Map click event handler
+        function clickOnMap(e) {
+            refresh();
+            var epos = {lng: e.lnglat.getLng(), lat: e.lnglat.getLat()};
+            $.post("/pos", JSON.stringify(epos), function(data) {
+                pos = data["result"];
+                if (pos.length == 0) {
+                    alert("Please choose a valid position.");
+                }
+                else {
+                    var marker = new_marker(new AMap.LngLat(pos[1], pos[2]), "green");
+                    marker.xlid = pos[0];
+                    marker.on("click", clickOnMarker);
+                    map.add(marker);
+                    current = marker;
+                }
+            }, "json");
+        }
+        var map = new AMap.Map("container_map", {zoom: 12, center: [116.397428, 39.90923]});
+        // Event listener
+        map.on("click", clickOnMap);
+        //输入提示
+        var auto = new AMap.Autocomplete({input: "location_name"});
+        var placeSearch = new AMap.PlaceSearch({map: map});  //构造地点查询类
+        AMap.event.addListener(auto, "select", function(e) {
+            placeSearch.setCity('010');
+            placeSearch.search($('#location_name').val());  //关键字查询查询
+        });//注册监听，当选中某条记录时会触发
+        // banned enter key of refreshing whole page in submitting form event
+        $("#form_location").submit(function(e){placeSearch.setCity('010');placeSearch.search($('#location_name').val());e.preventDefault();});
+        $("#form_origin").submit(function(e){e.preventDefault();});
+        $("#form_dest").submit(function(e){e.preventDefault();});
+        $("#form_taxi").submit(function(e){e.preventDefault();});
+    </script>
+</html>
