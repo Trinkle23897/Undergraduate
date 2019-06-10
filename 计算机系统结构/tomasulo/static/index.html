@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html style="height: 100%; width: 100%">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+        <title>Tomasulo</title>
+    </head>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+    <body style="height: 100%; width: 100%; overflow: auto; margin: 0px; padding: 0px">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <a class="navbar-brand" href="#">TOMASULO</a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/about">About</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#" id='clock'></a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#" onclick="run(1, 0)"><i class="fas fa-angle-right fa-2x" data-toggle="tooltip" data-placement='bottom' title='Step'></i></a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#" onclick="$('#myModal2').modal('show')"><i class="fas fa-angle-double-right fa-2x" data-toggle="tooltip" data-placement='bottom' title='Multi-steps'></i></a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#" onclick="run(-1, 200)"><i class="fas fa-chevron-circle-right fa-2x" data-toggle="tooltip" data-placement='bottom' title='Auto run'></i></a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#" onclick="stop()"><i class="far fa-pause-circle fa-2x" data-toggle="tooltip" data-placement='bottom' title='Pause'></i></a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#" onclick="run(-1, 0)"><i class="fas fa-step-forward fa-2x" data-toggle="tooltip" data-placement='bottom' title='Run to end'></i></a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#" onclick="reset()"><i class="fas fa-undo fa-2x" data-toggle="tooltip" data-placement='bottom' title='Reset'></i></a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#" onclick="show_modal()"><i class="fas fa-cloud-upload-alt fa-2x" data-toggle="tooltip" data-placement='bottom' title='Upload NEL'></i></a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">New NEL Instructions</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="message-text" class="col-form-label">Instructions</label>
+                                <textarea class="form-control" id="nel-inst" style="height: 300px"></textarea>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="update_nel()">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="myModal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel2" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel2">Multiple step run</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <div class="form-group">
+                                <label for="message-text" class="col-form-label">Steps</label>
+                                <input class="form-control" id="step_num" type="number" value=1></input>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="multi_step()">OK</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="py-4" style="height: 93%; width: 100%">
+            <div class="row" style="width: 100%">
+                <div class="col-md-5" style="width: 100%">
+                    <div id="inst-table" style="width: 100%"></div>
+                </div>
+                <div class="col-md-7 border-left" style="width: 100%">
+                    <div id="res-table" style="width: 100%"></div>
+                </div>
+            </div>
+            <hr>
+            <div id="reg-table" style="width: 100%"></div>
+        </div>
+    </body>
+    <script type="text/javascript">
+        var title_lb = ['Name', 'Busy', 'Remain', 'FU', 'Op', 'Imm'];
+        var title_rs = ['Name', 'Busy', 'Remain', 'FU', 'Op', 'Vj', 'Vk', 'Qj', 'Qk'];
+        var title_f = ['Status', 'Value'];
+        var title_inst = ['Issue', 'Exec Comp', 'Write Result'];
+        var name_lb = ['LB1', 'LB2', 'LB3'];
+        var name_rs = ['Ars1', 'Ars2', 'Ars3', 'Ars4', 'Ars5', 'Ars6', 'Mrs1', 'Mrs2', 'Mrs3'];
+        var nel = ["LD F1 0x2", "LD F2 0x1", "LD F3 0xFFFFFFFF", "SUB F1 F1 F2", "DIV F4 F3 F1", "JUMP 0x0 F1 0x2", "JUMP 0xFFFFFFFF F3 0xFFFFFFFD", "MUL F3 F1 F4"];
+        var done = false;
+        var tim = false;
+        function init() {
+            // reservation
+            html = '';
+            html += "<table class='table table-hover table-striped'><thead><tr>";
+            for (var i = 0; i < title_rs.length; ++i)
+                html += '<th scope="col">' + title_rs[i] + '</th>';
+            html += '</tr><tbody>';
+            for (var i = 0; i < name_rs.length; ++i) {
+                html += '<tr><th scope="row">' + name_rs[i] + "</th>";
+                for (var j = 1; j < title_rs.length; ++j)
+                    html += '<th scope="row" id="'+ name_rs[i] + '-' + title_rs[j] +'"></th>';
+                html += '</tr>';
+            }
+            html += "</tbody></table>";
+            html += "<table class='table table-hover table-striped'><thead><tr>";
+            for (var i = 0; i < title_lb.length; ++i)
+                html += "<th scope='col'>" + title_lb[i] + "</th>";
+            html += "</tr><tbody>";
+            for (var i = 0; i < name_lb.length; ++i) {
+                html += '<tr><th scope="row">' + name_lb[i] + "</th>";
+                for (var j = 1; j < title_lb.length; ++j)
+                    html += '<th scope="row" id="'+ name_lb[i] + '-' + title_lb[j] +'"></th>';
+                html += '</tr>';
+            }
+            html += "</tbody></table>";
+            $('#res-table').html(html);
+            // register
+            html = "<table class='table table-hover table-striped'><thead><tr><th scope='col'>Register</th>";
+            for (var i = 0; i < 32; ++i)
+                html += "<th scope='col'>F" + i + "</th>";
+            html += "</tr><tbody>";
+            for (var i = 0; i < title_f.length; ++i) {
+                html += '<tr><th scope="row">' + title_f[i] + "</th>";
+                for (var j = 0; j < 32; ++j)
+                    html += '<th scope="row" id="F'+ j + '-' + title_f[i] +'"></th>';
+                html += '</tr>';
+            }
+            html += "</tbody></table>";
+            $('#reg-table').html(html);
+            // init modal
+            $('#nel-inst').val(nel.join('\n'));
+            $(function () {$('[data-toggle="tooltip"]').tooltip()})
+        }
+        function refresh(data) {
+            console.log(data);
+            done = data['done'];
+            nel = data['nel'];
+            // draw inst table
+            html = "<table class='table table-hover table-striped'><thead><tr><th scope='col'>Code</th>";
+            for (var i = 0; i < title_inst.length; ++i)
+                html += "<th scope='col'>" + title_inst[i] + '</th>';
+            html += '</tr><tbody>';
+            for (var i = 0; i < nel.length; ++i) {
+                html += "<tr><th scope='row'>" + nel[i] + "</th>";
+                for (var j = 0; j < title_inst.length; ++j) {
+                    index = 'Code' + '-' + i + '-' + title_inst[j];
+                    html += "<th scope='row' id='" + index + "'>" + (data[index] == undefined ? '' : data[index]) + "</th>";
+                }
+                html += '</tr>';
+            }
+            html += "</tbody></table>";
+            $('#inst-table').html(html);
+            // clock
+            if (!done)
+                $('#clock').html('<i class="far fa-clock fa-2x" data-toggle="tooltip" data-placement="bottom" title="Clock"></i><span>' + data['clock'] + '</span>');
+            else
+                $('#clock').html('<i class="far fa-times-circle fa-2x" data-toggle="tooltip" data-placement="bottom" title="Clock"></i><span>' + data['clock'] + '</span>');
+            // LB
+            for (var i = 0; i < name_lb.length; ++i)
+                for (var j = 0; j < title_lb.length; ++j) {
+                    index = name_lb[i] + '-' + title_lb[j];
+                    $('#' + index).text(data[index] == undefined ? '' : data[index]);
+                }
+            // RS
+            for (var i = 0; i < name_rs.length; ++i)
+                for (var j = 0; j < title_rs.length; ++j) {
+                    index = name_rs[i] + '-' + title_rs[j];
+                    $('#' + index).text(data[index] == undefined ? '' : data[index]);
+                }
+            // REG
+            for (var i = 0; i < 32; ++i)
+                for (var j = 0; j < title_f.length; ++j) {
+                    index = 'F' + i + '-' + title_f[j];
+                    $('#' + index).text(data[index] == undefined ? '' : data[index]);
+                }
+        }
+        function show_modal() {
+            $('#nel-inst').val(nel.join('\n'));
+            $('#myModal').modal('show');
+        }
+        function multi_step() {
+            run($('#step_num').val(), 0);
+        }
+        function update_nel() {
+            var query = {nel: $('#nel-inst').val()};
+            $.post('/nel', JSON.stringify(query), function(data) {
+                refresh(data);
+            }, "json");
+        }
+        function run(step, interval) {
+            console.log(step, interval);
+            if (interval > 0) {
+                if (tim == false) {
+                    var query = {step: 1};
+                    tim = setInterval(function () {
+                        $.post('/run', JSON.stringify(query), function(data) {
+                            refresh(data);
+                        }, "json");
+                        if (done) {
+                            clearInterval(tim);
+                            tim = false;
+                        }
+                    }, interval);
+                }
+            }
+            else {
+                var query = {step: step};
+                $.post('/run', JSON.stringify(query), function(data) {
+                    refresh(data);
+                }, "json");
+            }
+        }
+        function stop() {
+            if (tim != false) {
+                clearInterval(tim);
+                tim = false;
+            }
+        }
+        function reset() {
+            $('#nel-inst').val(nel.join('\n'));
+            update_nel();
+        }
+        init();
+        update_nel();
+    </script>
+</html>
