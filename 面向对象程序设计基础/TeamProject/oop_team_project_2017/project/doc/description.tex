@@ -1,0 +1,40 @@
+\XeTeXlinebreaklocale "zh"
+\XeTeXlinebreakskip = 0pt plus 1pt
+
+\documentclass[11pt,a4paper]{article}
+
+\usepackage{colortbl}
+\usepackage{minted}
+\usepackage{xltxtra,fontspec,xunicode}
+\usepackage[hidelinks]{hyperref}
+
+\usepackage{graphicx}
+\usepackage{float}
+
+\defaultfontfeatures{Mapping=tex-text,Scale=MatchLowercase}
+\setmainfont{DejaVu Serif}
+\setsansfont{DejaVu Sans}
+\setmonofont{DejaVu Sans Mono}
+\usepackage[slantfont,boldfont]{xeCJK} % 允许斜体和粗体
+\setCJKmainfont{WenQuanYi Zen Hei}
+\setCJKsansfont{WenQuanYi Zen Hei}
+\setCJKmonofont{WenQuanYi Zen Hei Mono}
+
+\title{Rule-Based Regular Routing Method}
+\author{
+	周聿浩\\ \texttt{2016011347} \and
+	翁家翌\\ \texttt{2016011446}
+}
+
+%\setlength{\parindent}{2em}
+%\setlength{\parskip}{0.5em}
+
+\begin{document}
+\maketitle
+\tableofcontents
+\input{intro.tex}
+\input{usage.tex}
+\input{sys-arch.tex}
+\input{algo.tex}
+\input{performance.tex}
+\end{document}

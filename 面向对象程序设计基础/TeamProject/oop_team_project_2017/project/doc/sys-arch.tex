@@ -1,0 +1,36 @@
+\section{系统结构} \label{sys-arch}
+\qquad 
+在 src 中主要有这样几个文件：
+
+\begin{itemize}
+\item {\bf main.cpp} 主要实现了和用户交互的逻辑
+\item {\bf vertex.h} 主要实现了基本的节点类型 Vertex
+\item {\bf path.h/cpp} 主要实现了基本的路径类型 Path
+\item {\bf route.h/cpp} 整个路径规划算法的抽象接口 Route，同时定义了一些辅助函数用于输出等。下面三个是这个抽象类的具体实现：
+	\begin{itemize}
+	\item {\bf route\_network\_flow.h/cpp} 基于网络流的布线方法具体实现
+	\item {\bf route\_rule\_based.h/cpp} 基于规则的布线方法的具体实现
+	\item {\bf route\_input\_adapter.h/cpp} 用于读取存储于文件中的路径信息的适配器
+	\end{itemize}
+\item {\bf visualization.h/cpp} 用于可视化算法输出
+\end{itemize}
+
+Route 的具体实现都不对用户可见，利用一个委托函数来创建其实例同时转换为基类的指针。为了减少用户手动删除造成的不必要错误，使用 std::shared\_ptr 来管理内存。具体实现大致如下：
+
+\begin{minted}{c++}
+namespace {
+    class RouteNetworkFlowImpl : public Route
+    {
+    public:
+        void compute() {
+            // implementation
+        }
+    };
+} // unnamed namespace
+
+RoutePtr get_network_flow_algo()
+{
+    return std::make_shared<RouteNetworkFlowImpl>();
+}
+\end{minted}
+

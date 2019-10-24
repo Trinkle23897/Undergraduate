@@ -1,0 +1,57 @@
+\section{使用方法}
+\subsection{编译及运行}
+	\qquad
+	本项目依赖一些第三方库：
+	\begin{itemize}
+		\item Boost
+		\item OpenCV
+	\end{itemize}
+
+	并且使用 CMake 来进行 Makefile 的生成，可以在进入 src 目录后运行如下代码进行编译
+	\begin{minted}{bash}
+    mkdir build
+    cd build
+    cmake ../
+    make
+	\end{minted}
+
+	编译完成后使用 \mintinline{bash}{./main} 来运行程序，或可以使用 \mintinline{bash}{./main --help} 来查看帮助。
+
+	如果你想用基于网络流的算法计算节点大小为18x18的布线方案，可以运行如下
+
+	\begin{minted}{bash}
+    ./main -n 18 -a flow
+	\end{minted}
+
+	如果你想保存路径信息，并且不想显示窗口，则可以运行如下
+
+	\begin{minted}{bash}
+    ./main -n 18 -p 18x18.data --no-window
+	\end{minted}
+
+	如果你想将结果保存为大小为3000x3000的图片，并在窗口以700x700的大小显示，则可以运行如下
+
+	\begin{minted}{bash}
+    ./main -n 18 --img-size 3000 --win-size 700
+	\end{minted}
+
+	如果想要查看具体的计算过程，则可以运行如下
+
+	\begin{minted}{bash}
+    ./main -n 30 --show-step -d 500
+	\end{minted}
+\subsection{具体参数}
+	\begin{itemize}
+	\item[-h] 查看帮助。
+	\item[-n] 指定x方向以及y方向有多少个节点，默认为12。
+	\item[-a] 指定算法，有基于规则（rule）和基于网络流（flow）两个方法，默认为 rule。
+	\item[-p] 将结果存储到指定文件（若没有这个参数则不存储）。
+	\item[-i] 从指定文件读入结果并且显示。
+	\item[-o] 将结果以图片形式存储到文件。
+	\item[-{}-img-size] 指定存储的图片大小，默认为2000px。
+	\item[-{}-win-size] 指定显示的窗口大小，默认为800px。
+	\item[-{}-no-window] 不在窗口显示结果。
+	\item[-{}-show-step] 显示计算的具体步骤。
+	\item[-d] 指定两个计算步骤的显示间隔时间（单位为ms，默认为1）。
+	\end{itemize}
+
