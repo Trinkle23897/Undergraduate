@@ -24,10 +24,10 @@ For English version, please refer to [README-en.md](README-en.md).
 | 2017.9 | [程序设计训练](https://github.com/Trinkle23897/Undergraduate/tree/master/%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E8%AE%AD%E7%BB%83) | [Sudoku](https://github.com/Trinkle23897/sudoku-qt5)、[Draughts](https://github.com/Trinkle23897/draughts-qt5)、[Wikipedia](https://github.com/Trinkle23897/list%5C_of%5C_people) |
 | 2017.9 - 2018.1 | [软件工程](https://github.com/Trinkle23897/Undergraduate/tree/master/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B) | - |
 | - | [网络安全工程与实践](https://github.com/Trinkle23897/Undergraduate/tree/master/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E5%B7%A5%E7%A8%8B%E4%B8%8E%E5%AE%9E%E8%B7%B5) | [Login Security](https://github.com/Trinkle23897/Undergraduate/tree/master/%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E5%B7%A5%E7%A8%8B%E4%B8%8E%E5%AE%9E%E8%B7%B5/%E5%A4%A7%E4%BD%9C%E4%B8%9A%EF%BC%88%E4%BA%8C%E9%80%89%E4%B8%80%EF%BC%89/exp4) |
-| - | [数字图像处理](https://github.com/Trinkle23897/dip2018) | 图像融合、人脸混合 |
 | 2018.1 | [Andrew-Machine-Learning](https://github.com/Trinkle23897/ml/tree/master/Coursera) | - |
-| - | [cs231n](https://github.com/Trinkle23897/ml/tree/master/cs231n) | - |
-| 2018.2 - 2018.6 | [计算机图形学基础]((https://github.com/Trinkle23897/Computational-Graphics-THU-2018)) | 真实感图像渲染、图像融合 |
+| - | [cs231n](https://github.com/Trinkle23897/ml/tree/master/cs231n) | Computer Vision |
+| 2018.2 - 2018.6 | [计算机图形学基础](https://github.com/Trinkle23897/Computational-Graphics-THU-2018) | 真实感图像渲染、图像融合 |
+| - | [数字图像处理](https://github.com/Trinkle23897/dip2018) | 图像融合、人脸混合、Few Shot Learning |
 | - | [数字逻辑实验](https://github.com/Trinkle23897/Undergraduate/tree/master/%E6%95%B0%E5%AD%97%E9%80%BB%E8%BE%91%E5%AE%9E%E9%AA%8C) | - |
 | 2018.8 - 2018.9 | [Java程序设计与训练](https://github.com/Trinkle23897/Undergraduate/tree/master/Java%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E4%B8%8E%E8%AE%AD%E7%BB%83) | [新闻APP](https://github.com/Trinkle23897/simple-news-android-app) |
 | - | [汇编语言程序设计](https://github.com/Trinkle23897/Undergraduate/tree/master/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1) | - |
@@ -42,5 +42,5 @@ For English version, please refer to [README-en.md](README-en.md).
 | - | [数据库专题训练](https://github.com/Trinkle23897/Undergraduate/tree/master/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%93%E9%A2%98%E8%AE%AD%E7%BB%83) | [SimSearcher](https://github.com/Trinkle23897/Undergraduate/tree/master/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%93%E9%A2%98%E8%AE%AD%E7%BB%83/SimSearcher)、[SimJoiner](https://github.com/Trinkle23897/Undergraduate/tree/master/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%93%E9%A2%98%E8%AE%AD%E7%BB%83/SimJoiner)、[Taxi](https://github.com/Trinkle23897/Undergraduate/tree/master/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%93%E9%A2%98%E8%AE%AD%E7%BB%83/Taxi) |
 | - | [现代密码学](https://github.com/Trinkle23897/Undergraduate/tree/master/%E7%8E%B0%E4%BB%A3%E5%AF%86%E7%A0%81%E5%AD%A6) | [Enigma](https://github.com/Trinkle23897/Undergraduate/tree/master/%E7%8E%B0%E4%BB%A3%E5%AF%86%E7%A0%81%E5%AD%A6/Enigma)、[AES+SHA](https://github.com/Trinkle23897/Undergraduate/tree/master/%E7%8E%B0%E4%BB%A3%E5%AF%86%E7%A0%81%E5%AD%A6/AES%2BSHA)、[RSA](https://github.com/Trinkle23897/Undergraduate/tree/master/%E7%8E%B0%E4%BB%A3%E5%AF%86%E7%A0%81%E5%AD%A6/RSA) |
 | - | [数值分析](https://github.com/Trinkle23897/Undergraduate/tree/master/%E6%95%B0%E5%80%BC%E5%88%86%E6%9E%90) | - |
-| - | [cs294-112](https://github.com/Trinkle23897/CS294-112) | - |
+| - | [cs294-112](https://github.com/Trinkle23897/CS294-112) | Reinforcement Learning |
 
